@@ -1,0 +1,242 @@
+/* ============================================
+   ORBITIQ - PREMIUM SPACE-THEMED STYLING
+   Futuristic Design for Satellite Error Prediction
+============================================ */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* ============================================
+   ROOT VARIABLES & GLOBAL RESET
+============================================ */
+:root {
+    --primary-blue: #00d4ff;
+    --primary-purple: #9d4edd;
+    --primary-pink: #ff006e;
+    --accent-cyan: #00f5ff;
+    --accent-orange: #ff9500;
+    --deep-space: #0a0e27;
+    --dark-void: #050714;
+    --nebula-purple: rgba(157, 78, 221, 0.15);
+    --nebula-blue: rgba(0, 212, 255, 0.1);
+    
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    
+    --font-heading: 'Orbitron', monospace;
+    --font-body: 'Rajdhani', sans-serif;
+    
+    --gradient-space: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
+    --gradient-neon: linear-gradient(90deg, #00d4ff, #9d4edd, #ff006e);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--deep-space);
+    color: #ffffff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ============================================
+   ANIMATED SPACE BACKGROUND
+============================================ */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(ellipse at top, rgba(157, 78, 221, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        var(--gradient-space);
+    z-index: -2;
+    animation: nebula-pulse 15s ease-in-out infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent);
+    background-size: 200% 200%;
+    opacity: 0.4;
+    z-index: -1;
+    animation: stars-float 120s linear infinite;
+}
+
+@keyframes nebula-pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+@keyframes stars-float {
+    from { background-position: 0% 0%; }
+    to { background-position: 100% 100%; }
+}
+
+/* ============================================
+   HERO HEADER SECTION
+============================================ */
+.hero {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 900;
+    background: var(--gradient-neon);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.hero-sub {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 2px;
+}
+
+/* ============================================
+   NEON TEXT EFFECTS
+============================================ */
+.neon-text {
+    font-family: var(--font-heading);
+    color: var(--primary-blue);
+    text-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--accent-cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.neon-header {
+    font-family: var(--font-heading);
+    color: var(--accent-cyan);
+    text-shadow: 0 0 15px var(--accent-cyan);
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   SPACE CARDS & GLOW CARDS
+============================================ */
+.space-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 2px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.4s ease;
+}
+
+.space-card:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.glow-card {
+    background: rgba(157, 78, 221, 0.05);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(157, 78, 221, 0.3);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.glow-card:hover {
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 30px rgba(157, 78, 221, 0.3);
+}
+
+/* ============================================
+   STREAMLIT COMPONENT OVERRIDES
+============================================ */
+.stButton > button {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+    width: 100%;
+}
+
+.stButton > button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+}
+
+[data-testid="stMetricValue"] {
+    font-family: var(--font-heading);
+    color: var(--primary-blue) !important;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.stTabs [data-baseweb="tab-list"] {
+    background: var(--glass-bg);
+    border-radius: 12px;
+    padding: 5px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)) !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--dark-void);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 10px;
+}
+
+/* Dataframe Styling */
+.dataframe {
+    background: var(--glass-bg) !important;
+    color: white !important;
+    border: 1px solid var(--glass-border) !important;
+}
