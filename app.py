@@ -28,7 +28,7 @@ except Exception:
 # PAGE CONFIG
 # ===============================
 st.set_page_config(
-    page_title="Satellite Error Prediction",
+    page_title="Satellite Position Error and Satellite Clock Error Prediction using LSTM Networks on GEO and MEO GNSS Data.",
     page_icon="🛰️",
     layout="wide",
 )
