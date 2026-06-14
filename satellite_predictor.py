@@ -3,6 +3,8 @@
 # Predicts satellite ephemeris and clock errors using LSTM neural networks
 """
 
+import os
+
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
@@ -12,6 +14,11 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from scipy import stats
 import pickle
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score
+)
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -207,7 +214,26 @@ class SatelliteErrorPredictor:
                 batch_size=batch_size,
                 verbose=0
             )
+            preds = model.predict(X_val, verbose=0)
 
+            mae = mean_absolute_error(y_val, preds)
+
+            mse = mean_squared_error(y_val, preds)
+
+            rmse = np.sqrt(mse)
+
+            r2 = r2_score(y_val, preds)
+
+            if not hasattr(self, "metrics"):
+                self.metrics = {}
+
+            self.metrics[f"{satellite_type}_{target}"] = {
+                "MAE": float(mae),
+                "MSE": float(mse),
+                "RMSE": float(rmse),
+                "R2": float(r2),
+                "Loss": float(history.history["loss"][-1])
+            }
             self.models[f'{satellite_type}_{target}'] = model
             histories[target] = history.history
 
@@ -273,6 +299,8 @@ class SatelliteErrorPredictor:
 
         with open(f'{save_dir}/scalers.pkl', 'wb') as f:
             pickle.dump(self.scalers, f)
+        with open(f'{save_dir}/metrics.pkl', 'wb') as f:
+            pickle.dump(self.metrics, f)
 
     def load_models(self, save_dir='models'):
 
@@ -288,7 +316,13 @@ class SatelliteErrorPredictor:
 
         with open(f'{save_dir}/scalers.pkl', 'rb') as f:
             self.scalers = pickle.load(f)
+        metrics_file = f"{save_dir}/metrics.pkl"
 
+        if os.path.exists(metrics_file):
+            with open(metrics_file, "rb") as f:
+                self.metrics = pickle.load(f)
+        else:
+            self.metrics = {}
         print(f"✓ Models loaded from {save_dir}/")
 
 

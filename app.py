@@ -263,6 +263,7 @@ page = st.sidebar.radio(
         "Data Analysis",
         "3D Visualization",
         "Predictions",
+        "Model Performance",
         "About"
     ]
 )
@@ -276,12 +277,12 @@ if page == "Dashboard":
                     background: linear-gradient(135deg, #0a0e27, #1a1f3a);
                     box-shadow: 0 0 20px #00d4ff; margin-bottom:20px;">
             <h1 style="font-size:48px; color:#00d4ff; font-family:Orbitron;
-                        text-shadow:0 0 15px #00d4ff;"> SATELLITE ERROR PREDICTION SYSTEM</h1>
+                        text-shadow:0 0 15px #00d4ff;"> SATELLITE TIME ERROR PREDICTION SYSTEM</h1>
         </div>
     """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.write("Next-generation system for analyzing and predicting satellite ephemeris & clock errors.")
+    st.write("Satellite Position Error and Satellite Clock Error Prediction using LSTM Networks on GEO and MEO GNSS Data..")
 
     st.markdown("---")
 
@@ -361,7 +362,128 @@ if page == "Dashboard":
     
     else:
         st.warning("No data files are currently loaded.")
+elif page == "Model Performance":
 
+    st.header("📈 Model Performance Metrics")
+
+    predictor = load_predictor()
+
+    if not hasattr(predictor, "metrics") or len(predictor.metrics) == 0:
+        st.warning(
+            "No metrics found. Models must be retrained and metrics saved first."
+        )
+
+    else:
+
+        selected_metric = st.selectbox(
+            "Select Model",
+            list(predictor.metrics.keys())
+        )
+
+        metrics = predictor.metrics[selected_metric]
+
+        c1, c2, c3, c4, c5 = st.columns(5)
+
+        c1.metric(
+            "MAE",
+            f"{metrics['MAE']:.4f}"
+        )
+            
+        c2.metric(
+            "MSE",
+            f"{metrics['MSE']:.4f}"
+        )
+
+        c3.metric(
+            "RMSE",
+            f"{metrics['RMSE']:.4f}"
+        )
+
+        c4.metric(
+            "R²",
+            f"{metrics['R2']:.4f}"
+        )
+
+        c5.metric(
+            "Loss",
+            f"{metrics['Loss']:.4f}"
+        )
+        st.markdown("---")
+
+        st.subheader("📡 Overall Model Profile")
+
+        radar_fig = go.Figure()
+
+        radar_fig.add_trace(
+            go.Scatterpolar(
+                r=[
+                    metrics["MAE"],
+                    metrics["MSE"],
+                    metrics["RMSE"],
+                    abs(metrics["R2"]),
+                    metrics["Loss"]
+                ],
+                theta=[
+                    "MAE",
+                    "MSE",
+                    "RMSE",
+                    "R²",
+                    "Loss"
+                ],
+                fill="toself",
+                name="Model Metrics"
+            )
+        )
+
+        radar_fig.update_layout(
+            template="plotly_dark",
+            polar=dict(
+                radialaxis=dict(
+                    visible=True
+                )
+            ),
+            height=500
+        )
+
+        st.plotly_chart(
+            radar_fig,
+            use_container_width=True
+        )
+        st.subheader("📊 Error Metric Comparison")
+
+        metric_df = pd.DataFrame({
+            "Metric": [
+                "MAE",
+                "MSE",
+                "RMSE",
+                "Loss"
+            ],
+            "Value": [
+                metrics["MAE"],
+                metrics["MSE"],
+                metrics["RMSE"],
+                metrics["Loss"]
+            ]
+        })
+
+        bar_fig = px.bar(
+            metric_df,
+            x="Metric",
+            y="Value",
+            title="Model Error Metrics",
+            template="plotly_dark"
+        )
+
+        st.plotly_chart(
+            bar_fig,
+            use_container_width=True
+        )
+        
+        st.markdown("---")
+
+        st.dataframe(
+            pd.DataFrame([metrics])
+        )
 elif page != "About":
     
     if not st.session_state['data_files']:
