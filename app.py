@@ -641,38 +641,80 @@ elif page != "About":
 
 
 # ===============================================
-# ABOUT
+# ABOUT & EXPLAINER MODULE
 # ===============================================
 elif page == "About":
-    st.header("About Project")
+    st.header("📚 Project Explainer & Documentation")
     st.markdown("---")
-    st.markdown("""
-    <h2 style="text-align:left;">Satellite error prediction</h2>
+    
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "🛰️ Problem Statement", 
+        "🌍 GEO vs MEO", 
+        "📏 Metrics Explained", 
+        "🤖 Model Architecture",
+        "📊 Diagrams"
+    ])
+    
+    with tab1:
+        st.markdown("""
+        ### ISRO Satellite Error Prediction
+        
+        **The Goal:** 
+        This project aims to accurately predict satellite **ephemeris** (X, Y, Z coordinates) and **clock errors**. 
+        
+        **Why is this important?**
+        GNSS (Global Navigation Satellite Systems) rely on extremely precise timing and positioning data to determine your location on Earth. 
+        Even a tiny error in a satellite's reported clock time or orbital position can translate to meters of positioning error on the ground. 
+        By forecasting these deviations, we can apply corrections and vastly improve positioning accuracy for future epochs, aligning with ISRO's high-precision requirements.
+        """)
+        
+    with tab2:
+        st.markdown("""
+        ### Understanding Satellite Orbits
+        
+        **GEO (Geosynchronous Equatorial Orbit):**
+        - Satellites orbiting at ~35,786 km above the Earth's equator.
+        - They match the Earth's rotation, appearing stationary in the sky.
+        - Because of their stable, distant orbit, their error patterns might be more gradual and strongly influenced by long-term gravitational anomalies or solar radiation pressure.
+        
+        **MEO (Medium Earth Orbit):**
+        - Satellites orbiting between ~2,000 km and ~35,786 km (typically around 20,200 km for GPS).
+        - They move relatively fast across the sky (usually completing an orbit in ~12 hours).
+        - Their error patterns can be more dynamic and subject to frequent changes, requiring a robust sliding-window approach for time-series forecasting.
+        """)
 
-    <p>
-    🛰️ <b></b> A solution designed for <b>ISRO</b> Predicting Time varying satellite error patterns. 
-    This project integrates <b>advanced ML architectures</b> with <b>physics-based modeling</b> to estimate and forecast deviations between broadcast GNSS values and ICD-modeled parameters — enabling precise orbit and clock error predictions for future epochs.
-    </p>
+    with tab3:
+        st.markdown("""
+        ### How We Measure Success (The Metrics)
+        
+        To evaluate how well our models predict satellite errors, we use standard regression metrics:
+        
+        - **MAE (Mean Absolute Error):** The average size of the mistakes our model makes, measured in meters. A lower MAE means the predictions are generally very close to the actual error.
+        - **MSE (Mean Squared Error):** Similar to MAE, but it *squares* the errors before averaging them. This heavily penalizes the model for making very large mistakes (e.g., predicting an error of 10m when the actual error was 1m).
+        - **RMSE (Root Mean Squared Error):** The square root of MSE. It is in the same unit (meters) as the original data and is excellent for understanding the average magnitude of large prediction deviations.
+        - **R² (R-Squared):** Explains how much of the variance in the satellite error is captured by the model. An R² close to 1.0 means the model perfectly captures the pattern of the errors, while a lower score means the model struggles to follow the trend.
+        """)
 
-    <ul>
-      <li> <b>Data:</b> Seven-day GNSS dataset containing recorded clock and ephemeris discrepancies for GEO/GSO and MEO satellites.  
-      The platform supports flexible data uploads — users can input datasets of varying durations for different satellites.</li>
-
-      <li> <b>Forecast Horizons:</b> Configurable validity windows ranging from 15 minutes to 24 hours (15 min, 30 min, 1 hr … 24 hr), aligning with ISRO’s accuracy requirements.</li>
-
-      <li> <b>Model Architectures Supported</b> (with more coming soon):
-        <ul>
-          <li> RNNs (LSTM, GRU) — sequential error forecasting</li>
-          <li> GANs — synthetic data augmentation for low-error epochs</li>
-          <li> Transformers — capturing long-range temporal dependencies</li>
-          <li> Gaussian Processes — probabilistic uncertainty quantification</li>
-        </ul>
-      </li>
-
-      <li> <b>Statistical Analysis:</b> Includes residual diagnostics and Shapiro–Wilk normality testing to assess distributional characteristics.</li>
-    </ul>
-
-    <p>
-     <b></b>
-    </p>
-    """, unsafe_allow_html=True)
+    with tab4:
+        st.markdown("""
+        ### The Machine Learning Approach
+        
+        Predicting satellite errors over time is a **Multivariate Time-Series Forecasting** problem.
+        
+        **The Sliding Window Technique:**
+        Instead of predicting based on a single point in time, the system uses a *sequence length* (e.g., 7 time steps). We feed the model a "sliding window" of historical data, which includes:
+        - X, Y, Z position errors
+        - Clock errors
+        - Engineered features like rolling means and standard deviations
+        
+        **Model Selection:**
+        While **LSTMs (Long Short-Term Memory)** networks are powerful for sequence data, they are highly data-hungry and prone to overfitting on small datasets. For scenarios where we have limited historical data, **Tree-based models (like XGBoost or Random Forest)** are highly recommended. These models can ingest the sliding-window tabular data, resist overfitting, and provide robust predictions without needing millions of data points.
+        """)
+        
+    with tab5:
+        st.markdown("### System & Data Flow Diagrams")
+        st.markdown("Below are the architecture and data flow diagrams that outline the system's infrastructure:")
+        
+        st.image("system_architecture.png", caption="System Architecture", use_container_width=True)
+        st.markdown("---")
+        st.image("data_flow_diagram.png", caption="Data Flow Diagram", use_container_width=True)
